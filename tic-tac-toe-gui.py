@@ -28,6 +28,10 @@ def play(event):
     
     if (turn == 1):
         button["text"] = "X"
+        turn = not(turn)
+    else:
+        button["text"] = "O"
+        turn = not(turn)
 
 
 # tic tac toe board
@@ -42,25 +46,32 @@ button0.bind("<Button-1>", play)
 
 button0 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
 button0.grid(row = 0, column=2)
+button0.bind("<Button-1>", play)
 
 # second row
 button0 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
 button0.grid(row = 1, column=0)
+button0.bind("<Button-1>", play)
 
 button0 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
 button0.grid(row = 1, column=1)
+button0.bind("<Button-1>", play)
 
 button0 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
 button0.grid(row = 1, column=2)
+button0.bind("<Button-1>", play)
 
 # third row
 button0 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
 button0.grid(row = 2, column=0)
+button0.bind("<Button-1>", play)
 
 button0 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
 button0.grid(row = 2, column=1)
+button0.bind("<Button-1>", play)
 
 button0 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
 button0.grid(row = 2, column=2)
+button0.bind("<Button-1>", play)
 
 root.mainloop()
