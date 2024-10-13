@@ -13,8 +13,7 @@ frame1 = Frame(root)
 frame1.pack()
 
 title_label = Label(frame1, text = "Tic-Tac-Toe", font = ("Arial", 30),bg="slategray4",fg="black")
-title_label.pack()
-
+title_label.pack() 
 
 frame2 = Frame(root)
 frame2.pack()
@@ -56,6 +55,22 @@ def Draw():
             return False
         
     return True   
+
+# restart game
+def restartGame():
+    # remove the button texts
+
+    for button in buttons:
+        button["text"] = " "
+
+    # remove the board 
+    for position in board.keys():
+        board[position] = " "
+    # display the title after restart the game
+    title_label = Label(frame1, text = "Tic-Tac-Toe", font = ("Arial", 30),bg="slategray4",fg="black")
+
+    
+    
 # when click any button then X or O show into the button
 def play(event):
     global turn
@@ -88,10 +103,9 @@ def play(event):
         if Draw():
             DrawLabel = Label(frame2, text = f"Draw the Game...",bg = "slategray4", font=("Arial",25))
             DrawLabel.grid(row = 1, column = 0, columnspan = 3)
-    
-        
-        
 
+    print(board)
+    
 
 # tic tac toe board
 # first row
@@ -134,8 +148,11 @@ button8.grid(row = 2, column=2)
 button8.bind("<Button-1>", play)
 
 # restart button
-restartButton = Button(frame2, text = "Restart Game", width= 12, height= 1, font = ("Arial", 20), bg = "green", relief=RAISED, borderwidth=5)
+restartButton = Button(frame2, text = "Restart Game", width= 12, height= 1, font = ("Arial", 20), bg = "green", relief=RAISED, borderwidth=5, command= restartGame)
 restartButton.grid(row = 4, column=0,columnspan=3)
 
+# all buttons stored in a buttons list
+
+buttons = [button0, button1, button2, button3, button4, button5, button6, button7, button8]
 
 root.mainloop()
