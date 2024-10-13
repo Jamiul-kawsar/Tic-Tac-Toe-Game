@@ -25,6 +25,9 @@ board = {1: " ",2: " ",3: " ",
 
 # global variable
 turn = "X"
+game_end = False
+winningLabel = None
+DrawLabel = None
 # for winning function to check who is winner x or o
 def checkWinner(player):
     # columns1
@@ -49,17 +52,20 @@ def checkWinner(player):
     return False
 
 # draw function 
-def Draw():
+def Draw(player):
     for position in board.keys():
         if board[position] == " ":
             return False
-        
+        # all turn after any one won the game
+        if not(checkWinner(player)):
+            return False
     return True   
 
 # restart game
 def restartGame():
+    global game_end, winningLabel, DrawLabel
+    game_end = False
     # remove the button texts
-
     for button in buttons:
         button["text"] = " "
 
@@ -68,91 +74,65 @@ def restartGame():
         board[position] = " "
     # display the title after restart the game
     title_label = Label(frame1, text = "Tic-Tac-Toe", font = ("Arial", 30),bg="slategray4",fg="black")
+    if winningLabel:
+        winningLabel.grid_forget()
+    if DrawLabel:
+        DrawLabel.grid_forget()
+
 
     
-    
+# the main function 
 # when click any button then X or O show into the button
-def play(event):
-    global turn
-    button = event.widget
-    buttonText = str(button)
-    clicked = buttonText[-1]
-    if clicked == "n":
-        clicked = 1
-    else:
-        clicked = int(clicked)
-
-    if(button["text"] == " "): # if button empty then only can click 
-        if (turn == "X"):
-            button["text"] = "X"
-            board[clicked] = button["text"]
-            if checkWinner(turn):
-                winningLabel = Label(frame2, text = f"{turn} wins the game",bg = "slategray4", font=("Arial",25))
-                # this message showns on the middle
-                winningLabel.grid(row = 1, column = 0, columnspan = 3)
-            turn = "O"
+if __name__ == "__main__":
+    def play(event):
+        global turn, game_end, winningLabel, DrawLabel
+        if game_end == True:
+            return
+        button = event.widget
+        buttonText = str(button)
+        clicked = buttonText[-1]
+        if clicked == "n":
+            clicked = 1
         else:
-            button["text"] = "O"
-            board[clicked] = button["text"]
-            if checkWinner(turn):
-                winningLabel = Label(frame2, text = f"{turn} wins the game",bg = "slategray4", font=("Arial",25))
-                winningLabel.grid(row = 1, column = 0, columnspan = 3)
-            turn = "X"
-        
-        # check for draws
-        if Draw():
-            DrawLabel = Label(frame2, text = f"Draw the Game...",bg = "slategray4", font=("Arial",25))
-            DrawLabel.grid(row = 1, column = 0, columnspan = 3)
+            clicked = int(clicked)
 
-    print(board)
-    
+        if(button["text"] == " "): # if button empty then only can click 
+            if (turn == "X"):
+                button["text"] = "X"
+                board[clicked] = button["text"]
+                if checkWinner(turn):
+                    winningLabel = Label(frame2, text = f"{turn} wins the game",bg = "slategray4", font=("Arial",25))
+                    # this message showns on the middle
+                    winningLabel.grid(row = 1, column = 0, columnspan = 3)
+                    game_end = True
+                turn = "O"
+            else:
+                button["text"] = "O"
+                board[clicked] = button["text"]
+                if checkWinner(turn):
+                    winningLabel = Label(frame2, text = f"{turn} wins the game",bg = "slategray4", font=("Arial",25))
+                    winningLabel.grid(row = 1, column = 0, columnspan = 3)
+                    game_end = True
+                turn = "X"
+            
+            # check for draws
+            if Draw(turn):
+                DrawLabel = Label(frame2, text = f"Draw the Game...",bg = "slategray4", font=("Arial",25))
+                DrawLabel.grid(row = 1, column = 0, columnspan = 3)
+                game_end = True
+        print(board)
 
-# tic tac toe board
-# first row
-button0 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button0.grid(row = 0, column=0)
-button0.bind("<Button-1>", play)
 
-button1 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button1.grid(row = 0, column=1)
-button1.bind("<Button-1>", play)
-
-button2 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button2.grid(row = 0, column=2)
-button2.bind("<Button-1>", play)
-
-# second row
-button3 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button3.grid(row = 1, column=0)
-button3.bind("<Button-1>", play)
-
-button4 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button4.grid(row = 1, column=1)
-button4.bind("<Button-1>", play)
-
-button5 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button5.grid(row = 1, column=2)
-button5.bind("<Button-1>", play)
-
-# third row
-button6 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button6.grid(row = 2, column=0)
-button6.bind("<Button-1>", play)
-
-button7 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button7.grid(row = 2, column=1)
-button7.bind("<Button-1>", play)
-
-button8 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
-button8.grid(row = 2, column=2)
-button8.bind("<Button-1>", play)
+# tic tac toe board buttons
+buttons = []
+for i in range(9):
+    button = Button(frame2, text=" ", width=4, height=2, bg="gray16", font=("Arial", 35), relief=RAISED, borderwidth=5)
+    button.grid(row=i//3, column=i % 3)
+    button.bind("<Button-1>", play)
+    buttons.append(button)
 
 # restart button
 restartButton = Button(frame2, text = "Restart Game", width= 12, height= 1, font = ("Arial", 20), bg = "green", relief=RAISED, borderwidth=5, command= restartGame)
 restartButton.grid(row = 4, column=0,columnspan=3)
-
-# all buttons stored in a buttons list
-
-buttons = [button0, button1, button2, button3, button4, button5, button6, button7, button8]
 
 root.mainloop()
