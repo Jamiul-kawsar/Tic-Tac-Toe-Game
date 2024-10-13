@@ -3,7 +3,7 @@ from tkinter import *
 # create the main window
 root = Tk()
 # set the window size
-root.geometry("500x500")
+root.geometry("500x600")
 # set the window title
 root.title("Tic Tac Toe")
 # set the window color
@@ -28,26 +28,34 @@ board = {1: " ",2: " ",3: " ",
 turn = "X"
 # for winning function to check who is winner x or o
 def checkWinner(player):
-    if (board[1] == board[4] and board[1] == board[7] and board[1] != ' '):
+    # columns1
+    if (board[1] == board[4] and board[1] == board[7] and board[1] == player):
         return True
-    if (board[2] == board[5] and board[2] == board[8] and board[2] != ' '):
+    if (board[2] == board[5] and board[2] == board[8] and board[2] == player):
         return True
-    if (board[3] == board[6] and board[3] == board[9] and board[3] != ' '):
+    if (board[3] == board[6] and board[3] == board[9] and board[3] == player):
         return True
-    if (board[1] == board[2] and board[1] == board[3] and board[1] != ' '):
+    # columns2
+    if (board[1] == board[2] and board[1] == board[3] and board[1] == player):
         return True
-    if (board[4] == board[5] and board[4] == board[6] and board[4] != ' '):
+    if (board[4] == board[5] and board[4] == board[6] and board[4] == player):
         return True
-    if (board[7] == board[8] and board[7] == board[9] and board[7] != ' '):
+    if (board[7] == board[8] and board[7] == board[9] and board[7] == player):
         return True
-
-    if (board[1] == board[5] and board[1] == board[9] and board[1] != ' '):
+    # columns3
+    if (board[1] == board[5] and board[1] == board[9] and board[1] == player):
         return True
-    if (board[3] == board[5] and board[3] == board[7] and board[3] != ' '):
+    if (board[3] == board[5] and board[3] == board[7] and board[3] == player):
         return True
     return False
 
-
+# draw function 
+def Draw():
+    for position in board.keys():
+        if board[position] == " ":
+            return False
+        
+    return True   
 # when click any button then X or O show into the button
 def play(event):
     global turn
@@ -58,20 +66,31 @@ def play(event):
         clicked = 1
     else:
         clicked = int(clicked)
-    print(clicked)
 
-    
     if(button["text"] == " "): # if button empty then only can click 
         if (turn == "X"):
             button["text"] = "X"
             board[clicked] = button["text"]
+            if checkWinner(turn):
+                winningLabel = Label(frame2, text = f"{turn} wins the game",bg = "slategray4", font=("Arial",25))
+                # this message showns on the middle
+                winningLabel.grid(row = 1, column = 0, columnspan = 3)
             turn = "O"
         else:
             button["text"] = "O"
             board[clicked] = button["text"]
+            if checkWinner(turn):
+                winningLabel = Label(frame2, text = f"{turn} wins the game",bg = "slategray4", font=("Arial",25))
+                winningLabel.grid(row = 1, column = 0, columnspan = 3)
             turn = "X"
+        
+        # check for draws
+        if Draw():
+            DrawLabel = Label(frame2, text = f"Draw the Game...",bg = "slategray4", font=("Arial",25))
+            DrawLabel.grid(row = 1, column = 0, columnspan = 3)
     
-    print(board)
+        
+        
 
 
 # tic tac toe board
@@ -113,5 +132,10 @@ button7.bind("<Button-1>", play)
 button8 = Button(frame2, text= " ", width= 4, height=2,bg="gray16",font=("Arial",35), relief=RAISED, borderwidth=5)
 button8.grid(row = 2, column=2)
 button8.bind("<Button-1>", play)
+
+# restart button
+restartButton = Button(frame2, text = "Restart Game", width= 12, height= 1, font = ("Arial", 20), bg = "green", relief=RAISED, borderwidth=5)
+restartButton.grid(row = 4, column=0,columnspan=3)
+
 
 root.mainloop()
