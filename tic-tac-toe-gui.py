@@ -52,13 +52,13 @@ def checkWinner(player):
     return False
 
 # draw function 
-def Draw(player):
+def Draw():
     for position in board.keys():
         if board[position] == " ":
             return False
-        # all turn after any one won the game
-        if not(checkWinner(player)):
-            return False
+        # all turn after anyone won the game
+        #if not(checkWinner(player)):
+            #return False
     return True   
 
 # restart game
@@ -79,6 +79,55 @@ def restartGame():
     if DrawLabel:
         DrawLabel.grid_forget()
 
+#minimax algorithm
+def minimax(board, isMaximizing):
+    if checkWinner("O"):
+        return 1
+    if checkWinner("X"):
+        return -1
+    if Draw():
+        return 0
+    if isMaximizing:
+        bestScore = -100
+
+        for key in board.keys():
+            if board[key] == " ":
+                board[key] = "O"
+                score = minimax(board, False) # false because of now it's player turn 
+                board[key] == " "
+                if score > bestScore:
+                    bestScore = score
+
+        return bestScore
+
+    else:
+        bestScore = 100
+
+        for key in board.keys():
+            if board[key] == " ":
+                board[key] = "X"
+                score = minimax(board, True) # True because of now it's computer turn 
+                board[key] == " "
+                if score < bestScore:
+                    bestScore = score
+        
+        return bestScore
+
+# computer play automaticly
+def playComputer():
+    bestScore = -100
+    bestMove = 0
+
+    for key in board.keys():
+        if board[key] == " ":
+            board[key] = "O"
+            score = minimax(board, False) # false because of now it's player turn 
+            board[key] == " "
+            if score > bestScore:
+                bestScore = score
+                bestMove = key
+
+    board[bestMove] = "O"
 
     
 # the main function 
@@ -106,6 +155,8 @@ if __name__ == "__main__":
                     winningLabel.grid(row = 1, column = 0, columnspan = 3)
                     game_end = True
                 turn = "O"
+                playComputer()
+                turn = "X"
             else:
                 button["text"] = "O"
                 board[clicked] = button["text"]
@@ -116,10 +167,11 @@ if __name__ == "__main__":
                 turn = "X"
             
             # check for draws
-            if Draw(turn):
+            if Draw():
                 DrawLabel = Label(frame2, text = f"Draw the Game...",bg = "slategray4", font=("Arial",25))
                 DrawLabel.grid(row = 1, column = 0, columnspan = 3)
                 game_end = True
+
         print(board)
 
 
