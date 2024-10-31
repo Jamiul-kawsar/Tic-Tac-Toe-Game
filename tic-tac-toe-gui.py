@@ -94,7 +94,7 @@ def minimax(board, isMaximizing):
     return bestScore
 
 def playComputer():
-    global turn
+    global turn, game_end
     bestScore = -100
     bestMove = 0
     for key in board.keys():
